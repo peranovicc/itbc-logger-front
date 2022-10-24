@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react'
+import { BrowserRouter as Router, Link, Route, Routes, Navigate } from 'react-router-dom'
+import './App.css'
+import { StyledFormButton } from './common_components/FormButton'
+import { StyledInputField } from './common_components/InputField'
+import { Navigation } from './common_components/Navigation'
+import { CreateLog } from './pages/CreateLog'
+import { Login } from './pages/Login'
+import { Register } from './pages/Register'
+import logo from './resources/logo.png';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+
+const App = () => {
+    const [token, setToken] = useState(localStorage.getItem('itbctkn'))
+
+    useEffect(() => {
+        // setToken('lala')
+    }, [])
+
+    return (
+        <Router>
+            <header id="page-header">
+                <div id="page-header-logo">
+                    <Link to="/">
+                        <img src={logo} alt="ITBC-Logo"/>
+                    </Link>
+                </div>
+                <Navigation isLoggedIn={token != null} />
+            </header>
+            <main id="page-main">
+                <Routes>
+                    <Route exact path='/' element={token ? <Navigate to='/create' /> : <Navigate to='/login' />} />
+                    <Route exact path='/register' element={<Register />} />
+                    <Route exact path='/login' element={<Login setToken={setToken} />} />
+                    <Route exact path='/create' element={<CreateLog />} />
+                </Routes>
+            </main>
+            <footer id="page-footer">
+
+            </footer>
+        </Router>
+    )
 }
 
-export default App;
+export default App
